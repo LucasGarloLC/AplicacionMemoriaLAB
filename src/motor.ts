@@ -1,29 +1,8 @@
 import { Carta, Tablero } from "./model";
+import { animacionMostrarCarta, esPartidaCompleta, mostrarImagen, mostrarTextoInformativo, ocultarImagen, sePuedeVoltearLaCarta } from "./ui";
 
 const barajarCartas = (cartas: Carta[]): Carta[] => {
   return cartas.sort(() => Math.random() - 0.5);
-};
-
-const sePuedeVoltearLaCarta = (tablero: Tablero, indice: number): boolean => {
-  if (
-    tablero.cartas[indice].encontrada ||
-    tablero.indiceCartaVolteadaB !== undefined
-  ) {
-    return false;
-  }
-  return true;
-};
-
-const mostrarTextoInformativo = (texto: string, card: HTMLElement): void => {
-  const tooltipDiv = card.appendChild(document.createElement("div"));
-  const tooltipSpan = tooltipDiv.appendChild(document.createElement("span"));
-
-  tooltipDiv.className = "tooltip";
-  tooltipSpan.className = "tooltiptext";
-  tooltipSpan.innerText = texto;
-  setTimeout(() => {
-    tooltipDiv.remove();
-  }, 1500);
 };
 
 const voltearLaCarta = (
@@ -47,44 +26,6 @@ const voltearLaCarta = (
   }
 };
 
-const animacionMostrarCarta = (card: HTMLElement): void => {
-  const image = card.querySelector("img");
-  if (image) {
-    image.style.transform = "rotateY(180deg)";
-  }
-};
-
-const mostrarImagen = (
-  tablero: Tablero,
-  card: HTMLElement,
-  indice: number
-): void => {
-  const image = card.querySelector("img");
-  if (image) {
-    image.src = tablero.cartas[indice].imagen;
-  }
-};
-
-const ocultarImagen = (indiceA: number, indiceB: number): void => {
-  setTimeout(() => {
-    const cardA = document.getElementById(`image-container-${indiceA}`);
-    const cardB = document.getElementById(`image-container-${indiceB}`);
-
-    if (cardA) {
-      const imageA = cardA.querySelector("img");
-      if (imageA) {
-        imageA.src = "";
-      }
-    }
-    if (cardB) {
-      const imageB = cardB.querySelector("img");
-      if (imageB) {
-        imageB.src = "";
-      }
-    }
-  }, 1000);
-};
-
 export const sonPareja = (
   indiceA: number,
   indiceB: number,
@@ -93,7 +34,7 @@ export const sonPareja = (
   return tablero.cartas[indiceA].idFoto === tablero.cartas[indiceB].idFoto;
 };
 
-const parejaEncontrada = (
+export const parejaEncontrada = (
   tablero: Tablero,
   indiceA: number,
   indiceB: number
@@ -105,17 +46,13 @@ const parejaEncontrada = (
   }
 };
 
-const parejaNoEncontrada = (
+export const parejaNoEncontrada = (
   tablero: Tablero,
   indiceA: number,
   indiceB: number
 ): void => {
   tablero.cartas[indiceA].estaVuelta = false;
   tablero.cartas[indiceB].estaVuelta = false;
-};
-
-export const esPartidaCompleta = (tablero: Tablero): boolean => {
-  return tablero.cartas.every((carta) => carta.encontrada);
 };
 
 export const iniciaPartida = (tablero: Tablero): void => {
